@@ -13,6 +13,10 @@ public class StartUI {
         store.add(input.read());
     }
 
+    public void add(String str) {
+        store.add(str);
+    }
+
     public void print() {
         for (String value : store.getAll()) {
             System.out.println(value);
