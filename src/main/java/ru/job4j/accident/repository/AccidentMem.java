@@ -10,16 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class AccidentMem {
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
-    private final static AccidentMem INST = new AccidentMem();
 
-    private AccidentMem() {
+    public AccidentMem() {
         accidents.put(1, Accident.of("Accident1", "Cars crashed #1", "Address1"));
         accidents.put(2, Accident.of("Accident2", "Cars crashed #2", "Address2"));
         accidents.put(3, Accident.of("Accident3", "Cars crashed #3", "Address3"));
-    }
-
-    public static AccidentMem instOf() {
-        return INST;
     }
 
     public Collection<Accident> getAllAccidents() {
