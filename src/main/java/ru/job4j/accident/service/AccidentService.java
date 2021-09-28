@@ -17,4 +17,12 @@ public class AccidentService {
     public Collection<Accident> getAllAccidents() {
         return accidentMem.getAllAccidents();
     }
+
+    public void addAccident(Accident accident) {
+         accidentMem.addAccident(accident);
+    }
+
+    public Accident getAccidentById(int id) {
+        return accidentMem.getAccidentById(id);
+    }
 }

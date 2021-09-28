@@ -10,7 +10,6 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @ComponentScan("ru.job4j.accident")
 public class WebConfig {
-
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver bean = new InternalResourceViewResolver();
