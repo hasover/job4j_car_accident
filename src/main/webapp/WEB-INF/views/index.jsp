@@ -21,10 +21,11 @@
         <thead>
         <tr>
             <th style="width: 5%"><i class="fa fa-edit mr-3"></i></th>
-            <th style="width: 20%;">Заголовок</th>
-            <th style="width: 40%;">Описание</th>
+            <th style="width: 15%;">Заголовок</th>
+            <th style="width: 20%;">Описание</th>
             <th style="width: 20%;">Адрес</th>
-            <th style="width: 25%;">Тип</th>
+            <th style="width: 20%;">Тип</th>
+            <th style="width: 20%;">Статьи</th>
         </tr>
         </thead>
         <tbody>
@@ -39,6 +40,13 @@
                 <th>${accident.text}</th>
                 <th>${accident.address}</th>
                 <th>${accident.type.name}</th>
+                <th>
+                    <ul>
+                    <c:forEach items="${accident.rules}" var="rule">
+                        <li>${rule.name}</li>
+                    </c:forEach>
+                    </ul>
+                </th>
             </tr>
         </c:forEach>
         </tbody>

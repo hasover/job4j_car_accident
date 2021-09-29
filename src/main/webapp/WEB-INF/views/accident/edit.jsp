@@ -19,6 +19,15 @@
             <td>Адрес:</td>
             <td><input type='text' name='address' value="${accident.address}"></td>
         </tr>
+        <tr hidden>
+            <td>
+                <select name="rIds" multiple>
+                    <c:forEach var="rule" items="${accident.rules}" >
+                        <option selected value="${rule.id}">${rule.name}</option>
+                    </c:forEach>
+                </select>
+            </td>
+        </tr>
         <tr>
             <td colspan='2'><input name="submit" type="submit" value="Сохранить" /></td>
         </tr>
