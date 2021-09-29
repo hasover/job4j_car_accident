@@ -22,8 +22,9 @@
         <tr>
             <th style="width: 5%"><i class="fa fa-edit mr-3"></i></th>
             <th style="width: 20%;">Заголовок</th>
-            <th style="width: 65%;">Описание</th>
+            <th style="width: 40%;">Описание</th>
             <th style="width: 20%;">Адрес</th>
+            <th style="width: 25%;">Тип</th>
         </tr>
         </thead>
         <tbody>
@@ -37,6 +38,7 @@
                 <th>${accident.name}</th>
                 <th>${accident.text}</th>
                 <th>${accident.address}</th>
+                <th>${accident.type.name}</th>
             </tr>
         </c:forEach>
         </tbody>

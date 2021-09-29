@@ -5,7 +5,7 @@
     <title>Редактирование</title>
 </head>
 <body>
-<form action="<c:url value='/save?id=${accident.id}'/>" method="POST">
+<form action="<c:url value='/save?id=${accident.id}&type.id=${accident.type.id}'/>" method="POST">
     <table>
         <tr>
             <td>Название:</td>
