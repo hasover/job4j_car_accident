@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
 public class AccidentMem implements AccidentStore {
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
     private final Map<Integer, AccidentType> types = new ConcurrentHashMap<>();

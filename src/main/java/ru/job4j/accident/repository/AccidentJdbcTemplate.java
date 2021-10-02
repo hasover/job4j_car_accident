@@ -4,7 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
@@ -13,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-@Repository
 public class AccidentJdbcTemplate implements AccidentStore {
     private final JdbcTemplate jdbc;
 
@@ -64,7 +62,7 @@ public class AccidentJdbcTemplate implements AccidentStore {
         if (accident.getId() == 0) {
             addNewAccident(accident, typeId, rIds);
         } else {
-            upDateAccident(accident);
+            updateAccident(accident);
         }
     }
     private void addNewAccident(Accident accident, int typeId, int[] rIds) {
@@ -86,7 +84,7 @@ public class AccidentJdbcTemplate implements AccidentStore {
         );
     }
 
-    private void upDateAccident(Accident accident) {
+    private void updateAccident(Accident accident) {
         jdbc.update("update accidents set name = ?, text = ?, address = ? where id = ?",
                 accident.getName(), accident.getText(), accident.getAddress(), accident.getId());
     }
