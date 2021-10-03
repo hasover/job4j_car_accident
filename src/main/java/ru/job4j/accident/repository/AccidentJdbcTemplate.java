@@ -4,14 +4,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 import ru.job4j.accident.model.Accident;
 import ru.job4j.accident.model.AccidentType;
 import ru.job4j.accident.model.Rule;
 import java.sql.PreparedStatement;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
+@Repository
 public class AccidentJdbcTemplate implements AccidentStore {
     private final JdbcTemplate jdbc;
 
@@ -23,12 +23,28 @@ public class AccidentJdbcTemplate implements AccidentStore {
             AccidentType.of(resultSet.getInt("id"),
             resultSet.getString("name"));
 
-    private final RowMapper<Accident> accidentMapper = (resultSet, rowNum) ->
-            new Accident(resultSet.getInt("id"),
-            resultSet.getString("name"), resultSet.getString("text"),
-            resultSet.getString("address"),
-            AccidentType.of(resultSet.getInt("t_id"), resultSet.getString("t_name")));
+    private final RowMapper<Accident> accidentMapper = (resultSet, rowNum) -> {
+       Accident accident =  new Accident(resultSet.getInt("id"),
+                resultSet.getString("name"), resultSet.getString("text"),
+                resultSet.getString("address"),
+                AccidentType.of(resultSet.getInt("t_id"), resultSet.getString("t_name")));
+       accident.addRule(Rule.of(resultSet.getInt("r_id"), resultSet.getString("r_name")));
+       return accident;
+    };
 
+    private Collection<Accident> mergeAccidentsWithSameId(List<Accident> accidents) {
+        Map<Integer, Accident> accidentMap = new LinkedHashMap<>();
+        for(Accident accident : accidents) {
+            Accident computedAccident = accidentMap.computeIfPresent(accident.getId(), (k, v) -> {
+                v.addRule(accident.getRules().iterator().next());
+                return v;
+            });
+            if (computedAccident == null) {
+                accidentMap.put(accident.getId(), accident);
+            }
+        }
+        return accidentMap.values();
+    }
 
     public AccidentJdbcTemplate(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
@@ -37,16 +53,12 @@ public class AccidentJdbcTemplate implements AccidentStore {
     @Override
     public Collection<Accident> getAllAccidents() {
         List<Accident> accidents = jdbc.query(
-                "select a.id, a.name, a.text, a.address, t.id as t_id, t.name as t_name from " +
-                        "accidents a join accident_types t on a.accident_type = t.id ", accidentMapper);
-        for (Accident accident : accidents) {
-            List<Rule> rules = jdbc.query(
-                    "select r.id, r.name from " +
-                            "accidents_rules ar join rules r on ar.rule_id = r.id " +
-                            "where ar.accident_id = ?", ruleMapper, accident.getId());
-            rules.forEach(accident::addRule);
-        }
-        return accidents;
+                "select a.id, a.name, a.text, a.address, t.id t_id , t.name t_name, r.id r_id, r.name r_name from " +
+                        "accidents a join accident_types t on a.accident_type = t.id " +
+                        "join accidents_rules ar on a.id = ar.accident_id " +
+                        "join rules r on ar.rule_id = r.id", accidentMapper);
+
+        return mergeAccidentsWithSameId(accidents);
     }
 
     public Collection<AccidentType> getAllTypes(){
@@ -91,16 +103,12 @@ public class AccidentJdbcTemplate implements AccidentStore {
 
     @Override
     public Accident getAccidentById(int id) {
-        Accident accident = jdbc.queryForObject(
-                "select a.id, a.name, a.text, a.address, t.id as t_id, t.name as t_name from " +
+        List<Accident> accidents = jdbc.query(
+                "select a.id, a.name, a.text, a.address, t.id t_id , t.name t_name, r.id r_id, r.name r_name from " +
                         "accidents a join accident_types t on a.accident_type = t.id " +
-                        "where a.id = ?", accidentMapper, id);
-        List<Rule> rules = jdbc.query(
-                "select r.id, r.name from " +
-                        "accidents_rules ar join rules r on ar.rule_id = r.id " +
-                        "where ar.accident_id = ?", ruleMapper, id);
-        rules.forEach(accident::addRule);
-        return accident;
-    }
+                        "join accidents_rules ar on a.id = ar.accident_id " +
+                        "join rules r on ar.rule_id = r.id where a.id = ?", accidentMapper, id);
 
+        return mergeAccidentsWithSameId(accidents).iterator().next();
+    }
 }

@@ -12,9 +12,9 @@ import java.util.Collection;
 
 @Service
 public class AccidentService {
-    private final AccidentHibernate accidentStore;
+    private final AccidentJdbcTemplate accidentStore;
 
-    public AccidentService(AccidentHibernate accidentStore) {
+    public AccidentService(AccidentJdbcTemplate accidentStore) {
         this.accidentStore = accidentStore;
     }
 
