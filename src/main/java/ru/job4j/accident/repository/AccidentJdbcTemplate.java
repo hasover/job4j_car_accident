@@ -32,9 +32,13 @@ public class AccidentJdbcTemplate implements AccidentStore {
        return accident;
     };
 
+    public AccidentJdbcTemplate(JdbcTemplate jdbc) {
+        this.jdbc = jdbc;
+    }
+
     private Collection<Accident> mergeAccidentsWithSameId(List<Accident> accidents) {
         Map<Integer, Accident> accidentMap = new LinkedHashMap<>();
-        for(Accident accident : accidents) {
+        for (Accident accident : accidents) {
             Accident computedAccident = accidentMap.computeIfPresent(accident.getId(), (k, v) -> {
                 v.addRule(accident.getRules().iterator().next());
                 return v;
@@ -46,26 +50,23 @@ public class AccidentJdbcTemplate implements AccidentStore {
         return accidentMap.values();
     }
 
-    public AccidentJdbcTemplate(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-    }
-
     @Override
     public Collection<Accident> getAllAccidents() {
         List<Accident> accidents = jdbc.query(
-                "select a.id, a.name, a.text, a.address, t.id t_id , t.name t_name, r.id r_id, r.name r_name from " +
-                        "accidents a join accident_types t on a.accident_type = t.id " +
-                        "join accidents_rules ar on a.id = ar.accident_id " +
-                        "join rules r on ar.rule_id = r.id", accidentMapper);
+                "select a.id, a.name, a.text, a.address, "
+                        + "t.id t_id , t.name t_name, r.id r_id, r.name r_name from "
+                        + "accidents a join accident_types t on a.accident_type = t.id "
+                        + "join accidents_rules ar on a.id = ar.accident_id "
+                        + "join rules r on ar.rule_id = r.id", accidentMapper);
 
         return mergeAccidentsWithSameId(accidents);
     }
 
-    public Collection<AccidentType> getAllTypes(){
+    public Collection<AccidentType> getAllTypes() {
         return jdbc.query("select id, name from accident_types", typeMapper);
     }
 
-    public Collection<Rule> getAllRules(){
+    public Collection<Rule> getAllRules() {
         return jdbc.query("select id, name from rules", ruleMapper);
     }
 
@@ -77,9 +78,10 @@ public class AccidentJdbcTemplate implements AccidentStore {
             updateAccident(accident);
         }
     }
+
     private void addNewAccident(Accident accident, int typeId, int[] rIds) {
-        String insertSql = "insert into accidents(name, text, address, accident_type) " +
-                "values(?,?,?,?)";
+        String insertSql = "insert into accidents(name, text, address, accident_type) "
+                + "values(?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"id"});
@@ -104,10 +106,11 @@ public class AccidentJdbcTemplate implements AccidentStore {
     @Override
     public Accident getAccidentById(int id) {
         List<Accident> accidents = jdbc.query(
-                "select a.id, a.name, a.text, a.address, t.id t_id , t.name t_name, r.id r_id, r.name r_name from " +
-                        "accidents a join accident_types t on a.accident_type = t.id " +
-                        "join accidents_rules ar on a.id = ar.accident_id " +
-                        "join rules r on ar.rule_id = r.id where a.id = ?", accidentMapper, id);
+                "select a.id, a.name, a.text, a.address, "
+                        + "t.id t_id , t.name t_name, r.id r_id, r.name r_name from "
+                        + "accidents a join accident_types t on a.accident_type = t.id "
+                        + "join accidents_rules ar on a.id = ar.accident_id "
+                        + "join rules r on ar.rule_id = r.id where a.id = ?", accidentMapper, id);
 
         return mergeAccidentsWithSameId(accidents).iterator().next();
     }

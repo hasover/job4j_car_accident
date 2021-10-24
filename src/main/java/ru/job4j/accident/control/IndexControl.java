@@ -13,10 +13,12 @@ public class IndexControl {
     public IndexControl(AccidentService service) {
         this.service = service;
     }
+
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("accidents", service.getAllAccidents());
-        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        model.addAttribute("user",
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return "index";
     }
 }

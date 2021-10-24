@@ -26,9 +26,9 @@ public class AccidentMem implements AccidentStore {
         rules.put(2, Rule.of(2, "Статья. 2"));
         rules.put(3, Rule.of(3, "Статья. 3"));
 
-        accidents.put(1, new Accident(1,"Accident1", "Cars crashed #1", "Address1", types.get(1)));
-        accidents.put(2, new Accident(2,"Accident2", "Cars crashed #2", "Address2", types.get(2)));
-        accidents.put(3, new Accident(3,"Accident3", "Cars crashed #3", "Address3", types.get(3)));
+        accidents.put(1, new Accident(1, "Accident1", "Cars crashed #1", "Address1", types.get(1)));
+        accidents.put(2, new Accident(2, "Accident2", "Cars crashed #2", "Address2", types.get(2)));
+        accidents.put(3, new Accident(3, "Accident3", "Cars crashed #3", "Address3", types.get(3)));
 
         accidents.get(1).addRule(rules.get(1));
         accidents.get(2).addRule(rules.get(2));

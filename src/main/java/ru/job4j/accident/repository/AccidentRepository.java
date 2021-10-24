@@ -11,6 +11,7 @@ public interface AccidentRepository extends CrudRepository<Accident, Integer> {
     @Query("select distinct a from Accident a join fetch a.rules join fetch a.type")
     List<Accident> findAll();
 
-    @Query("select distinct a from Accident a join fetch a.rules join fetch a.type where a.id =:idValue")
+    @Query("select distinct a from Accident a join fetch a.rules join fetch a.type "
+            + "where a.id =:idValue")
     Optional<Accident> findById(@Param("idValue") Integer id);
 }

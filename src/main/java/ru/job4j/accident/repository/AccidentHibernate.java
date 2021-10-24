@@ -19,7 +19,7 @@ public class AccidentHibernate implements AccidentStore {
         this.sf = sf;
     }
 
-    private<T> T tx(Function<Session, T> command) {
+    private <T> T tx(Function<Session, T> command) {
         try (Session session = sf.openSession()) {
             session.beginTransaction();
             T result =  command.apply(session);
@@ -33,8 +33,8 @@ public class AccidentHibernate implements AccidentStore {
 
     @Override
     public Collection<Accident> getAllAccidents() {
-        return tx(session -> session.createQuery("select distinct a from Accident a " +
-                "join fetch a.rules join fetch a.type", Accident.class).list());
+        return tx(session -> session.createQuery("select distinct a from Accident a "
+                + "join fetch a.rules join fetch a.type", Accident.class).list());
     }
 
     @Override
@@ -78,8 +78,8 @@ public class AccidentHibernate implements AccidentStore {
 
     @Override
     public Accident getAccidentById(int id) {
-        return tx(session -> session.createQuery("select distinct a from Accident a " +
-                "join fetch a.rules join fetch a.type where a.id =:param", Accident.class)
+        return tx(session -> session.createQuery("select distinct a from Accident a "
+                + "join fetch a.rules join fetch a.type where a.id =:param", Accident.class)
                 .setParameter("param", id).uniqueResult());
     }
 }

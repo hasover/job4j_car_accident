@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder)
                 .withUser("user").password(passwordEncoder.encode("123456")).roles("USER")
                 .and()
-                .withUser("admin").password(passwordEncoder.encode("123456")).roles("USER", "ADMIN");
+                .withUser("admin")
+                .password(passwordEncoder.encode("123456")).roles("USER", "ADMIN");
 
          */
         auth.jdbcAuthentication()

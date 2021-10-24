@@ -20,7 +20,8 @@ public class AccidentService {
     private final RuleRepository ruleRepository;
 
     public AccidentService(AccidentRepository accidentRepository,
-                           AccidentTypeRepository accidentTypeRepository, RuleRepository ruleRepository) {
+                           AccidentTypeRepository accidentTypeRepository,
+                           RuleRepository ruleRepository) {
         this.accidentRepository = accidentRepository;
         this.accidentTypeRepository = accidentTypeRepository;
         this.ruleRepository = ruleRepository;
