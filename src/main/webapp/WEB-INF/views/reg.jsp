@@ -13,7 +13,14 @@
             <td><input type='password' name='password'/></td>
         </tr>
         <tr>
-            <td colspan='2'><input name="submit" type="submit" value="submit" /></td>
+            <td colspan='2'><input name="submit" type="submit" value="submit" />
+            <br>
+            <c:if test="${not empty errorMessage}">
+                <div style="color:red; font-weight: bold; margin: 30px 0px;">
+                        ${errorMessage}
+                </div>
+            </c:if>
+            </td>
         </tr>
     </table>
 </form>
