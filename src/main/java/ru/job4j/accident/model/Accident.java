@@ -14,10 +14,10 @@ public class Accident {
     private String name;
     private String text;
     private String address;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "accident_type")
     private AccidentType type;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "accidents_rules", joinColumns = {
             @JoinColumn(name = "accident_id")},
             inverseJoinColumns = {
